@@ -3,6 +3,8 @@ package typing.core;
 import com.googlecode.lanterna.terminal.*;
 import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.graphics.*;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.TerminalSize;
 
 import java.io.IOException;
 
@@ -20,15 +22,23 @@ public class AppState {
 		tg = screen.newTextGraphics();
 	}
 
-	public void cleanUp() throws Exception{
-		screen.stopScreen();
+	public KeyStroke pollKey(){
+		try {
+			KeyStroke key = screen.pollInput();
+			return key;
+		} catch (IOException e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public KeyStroke readKey(){
-		try (KeyStroke key = screen.readInput()){
+		try {
+			KeyStroke key = screen.readInput();
 			return key;
-		} catch (IOException){
+		} catch (IOException e){
 			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -40,4 +50,20 @@ public class AppState {
 		}
 	}
 
+	public void refresh(){
+		try {
+			screen.refresh();
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	public TerminalSize getTerminalSize(){
+		try {
+			return terminal.getTerminalSize();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} 
+	}
 }

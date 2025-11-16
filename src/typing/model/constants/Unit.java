@@ -22,4 +22,11 @@ public enum Unit implements BaseConstant<Unit> {
 	public int getLength(){
 		return units.length;
 	}
+
+	public String[] getStrings(){
+		return new String[]{
+			"Words",
+			"Seconds"
+		};
+	}
 } 

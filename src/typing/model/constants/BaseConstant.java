@@ -6,4 +6,5 @@ public interface BaseConstant<T> {
 	public T next();
 	public T getDefault();
 	public int getLength();
+	public String[] getStrings();
 }

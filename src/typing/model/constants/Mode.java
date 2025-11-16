@@ -22,4 +22,11 @@ public enum Mode implements BaseConstant<Mode>{
 	public int getLength(){
 		return modes.length;
 	}
+
+	public String[] getStrings(){
+		return new String[] {
+			"Noobies",
+			"Normies"
+		};
+	}
 }

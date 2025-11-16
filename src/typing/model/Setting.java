@@ -5,28 +5,44 @@ import typing.model.constant.*;
 
 public class Setting {
 
-	public int duration = 0;
+	public int duration = 5;
 	public Mode mode = Mode.NOOBIES;
 	public Unit unit = Unit.WORD;
+	public Difficulty diff = Difficulty.EASY;
 
-	public Error setDuration(int _duration){
-		if (_duration < 5 ){
-			return Error.SHORT_DUR;
-		}
-		else if (_duration > 100){
-			return Error.LONG_DUR;
-		}
+	private boolean shouldExit = false;
+	private boolean shouldStart = false;
 
-		duration = _duration;
-		return Error.NO_ERR;
+	public void addDuration(){
+		duration = Math.min(100, duration + 1);
 	}
 
-	public void setMode(Mode _mode){
-		mode = _mode;
+	public void decDuration(){
+		duration = Math.max(5, duration - 1);
 	}
 
-	public void setUnit(Unit _unit){
-		unit = _unit;
+	public boolean exit(){
+		return shouldExit;
+	}
+
+	public boolean start(){
+		return shouldStart;
+	}
+
+	public void doExit(){
+		shouldExit = true;
+	}
+
+	public void stopExit(){
+		shouldExit = false;
+	}
+
+	public void doStart(){
+		shouldStart = true;
+	}
+
+	public void stopStart(){
+		shouldStart = false;
 	}
 
 }
