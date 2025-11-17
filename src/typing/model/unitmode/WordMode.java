@@ -35,13 +35,12 @@ public class WordMode implements UnitMode {
         while (!ts.finished()) {
 			index = ts.getIndex();
 
-			SleepHelper.sleep(10);
+			SleepHelper.sleep(30);
             KeyStroke ks = app.pollKey();
             ts.processKey(ks);
 
 
 			var g = app.tg;
-            app.screen.clear();
 
 			g.setForegroundColor(TextColor.ANSI.WHITE);
 			g.setBackgroundColor(TextColor.ANSI.DEFAULT);

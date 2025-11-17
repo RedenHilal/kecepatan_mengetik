@@ -36,13 +36,12 @@ public class SecondsMode implements UnitMode {
 			var now = System.currentTimeMillis();
 			index = ts.getIndex();
 
-			SleepHelper.sleep(10);
+			SleepHelper.sleep(30);
             KeyStroke ks = app.pollKey();
             ts.processKey(ks);
 
 
 			var g = app.tg;
-            app.screen.clear();
 
 			long remaining = (end - now) / 1000;
 			g.putString(1, 1, "SECONDS MODE — " + remaining + "s left");

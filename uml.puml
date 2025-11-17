@@ -1,0 +1,232 @@
+@startuml
+' Source: uploaded dump.txt (see chat).
+
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam dpi 120
+scale 0.9
+
+' Packages
+package "typing.console" {
+  interface InputHandler {
+    + handleInput(KeyStroke)
+  }
+  class Menu {
+    - menuIndex: int
+    - handlers: List
+    - setting: Setting
+    + startMenu(app: AppState): Setting
+    + handleInput(KeyStroke)
+  }
+  class Result {
+    + showSummary(app: AppState, summary: String)
+  }
+  class TypingSessionRenderer {
+    - xMax: int
+    - startX: int
+    - startY: int
+    + renderSession(TextGraphics, x, y, List, List, String)
+  }
+}
+
+package "typing.core" {
+  class AppState {
+    + terminal : Terminal
+    + screen : Screen
+    + tg : TextGraphic
+    + pollKey(): KeyStroke
+    + readKey(): KeyStroke
+    + refresh()
+  }
+  class Game {
+	- setting : Setting
+	- game : UnitMode
+	- gr : GameResult
+    + main(args : String[])
+  }
+  class TypingSession {
+    - mistakes: int
+    - keyPress: int
+    - listIndex: int
+    - words: List
+    - typedWords: List
+    - wordNow: String
+    - typed: StringBuilder
+    + processKey(KeyStroke)
+    + getIndex(): int
+    + finished(): boolean
+    + getTyped(): List
+    + getCurrentTyped(): String
+  }
+}
+
+package "typing.model.constant" {
+  interface BaseConstant<T> {
+    + prev(): T
+    + next(): T
+    + getDefault(): T
+    + getLength(): int
+    + getStrings(): String[]
+  }
+  enum Difficulty
+  enum Unit
+  enum WordType
+}
+
+package "typing.model.difficulty" {
+  class BaseDifficulty {
+    - weights: Map\<WordType, Double\>
+    + createDifficulty(Difficulty): BaseDifficulty
+  }
+  class EasyDifficulty {
+	+ EasyDifficulty() 	
+  }
+  class MediumDifficulty {
+	+ MediumDifficulty()
+  }
+  class HardDifficulty {
+	+ HardDifficulty()
+  }
+  class HellDifficulty {
+	+ HellDifficulty()
+  }
+  class CodeDifficulty {
+	+ CodeDifficulty()
+  }
+  class DifficultyFactory {
+    + fromEnum(Difficulty): BaseDifficulty
+  }
+}
+
+package "typing.model" {
+  class GameResult {
+    + wordsTyped: int
+    + charsTyped: int
+    + keyPresses: int
+    + mistakes: int
+    + durationSec: long
+    + wpm(): double
+    + cpm(): double
+    + accuracy(): double
+    + summary(): String
+  }
+  class Setting {
+    + duration: int
+    + unit: Unit
+    + diff: Difficulty
+    + addDuration()
+    + decDuration()
+    + doStart()
+    + stopStart()
+    + doExit()
+    + stopExit()
+  }
+}
+
+package "typing.model.unitmode" {
+  interface UnitMode {
+    + play(AppState, List): GameResult
+  }
+  class GameModeFactory {
+    + fromSetting(Setting): UnitMode
+  }
+  class WordMode {
+    - totalMistake: int
+    - words: int
+    + play(AppState, List): GameResult
+  }
+  class SecondsMode {
+    - totalMistake: int
+    - seconds: int
+    + play(AppState, List): GameResult
+  }
+}
+
+package "typing.word" {
+  class Generator {
+    - wordBank: Map
+    + generate(BaseDifficulty, Setting, double): List
+    + availableSources(): String
+  }
+  package "stash" {
+    abstract class Stash {
+      - path: String
+      + loadList(): List
+    }
+    class EasyStash {
+	+ EasyStash()
+	}
+    class MediumStash {
+	+ MediumStash()
+	}
+    class HardStash {
+	+ HardStash()
+	}
+    class ExtendedStash {
+	+ ExtendedStash()
+	}
+    class CodeStash {
+	+ CodeStash()
+	}
+    class PunctuationStash {
+	+ PunctuationStash()
+	}
+  }
+}
+
+package "typing.util" {
+  class SleepHelper {
+    + sleep(ms: long)
+  }
+}
+
+' ------- Relationships -------
+
+' Implements / Extends
+Menu ..|> InputHandler
+Difficulty ..|> BaseConstant
+WordType ..|> BaseConstant
+Unit ..|> BaseConstant
+WordMode ..|> UnitMode
+SecondsMode ..|> UnitMode
+BaseDifficulty <|-- EasyDifficulty
+BaseDifficulty <|-- MediumDifficulty
+BaseDifficulty <|-- HardDifficulty
+BaseDifficulty <|-- HellDifficulty
+BaseDifficulty <|-- CodeDifficulty
+Stash <|-- EasyStash
+Stash <|-- MediumStash
+Stash <|-- HardStash
+Stash <|-- ExtendedStash
+Stash <|-- CodeStash
+Stash <|-- PunctuationStash
+
+' Uses / Associations
+UnitMode --> SleepHelper
+Menu --> Setting : uses
+Menu ..> AppState : reads input / draws
+Result ..> AppState : uses
+Game --> Generator : creates
+Game --> GameModeFactory : uses
+Game --> Result : uses
+GameModeFactory --> Setting : fromSetting
+WordMode --> TypingSession : creates
+SecondsMode --> TypingSession : creates
+WordMode --> TypingSessionRenderer : uses
+SecondsMode --> TypingSessionRenderer : uses
+WordMode --> AppState : uses
+SecondsMode --> AppState : uses
+Generator --> Stash : loads
+Generator --> BaseDifficulty : uses weights
+BaseDifficulty --> WordType : uses
+BaseDifficulty ..> Difficulty
+DifficultyFactory --> BaseDifficulty : creates
+
+' Composition / Aggregation (fields)
+GameResult ..> Setting
+Game *.. Setting : composition
+Game o-- UnitMode : aggregation
+Game o-- GameResult : aggregation
+
+@enduml
+

@@ -14,7 +14,6 @@ public class Menu implements InputHandler {
 	private int menuIndex = 0;
 
 	private final List<Consumer<KeyType>> handlers =  List.of(
-		this::handleMode,
 		this::handleDifficulty,
 		this::handleUnit,
 		this::handleDuration,
@@ -64,16 +63,6 @@ public class Menu implements InputHandler {
 		}
 	}
 
-	public void handleMode(KeyType type){
-		switch (type){
-			case ArrowLeft->
-				setting.mode = setting.mode.prev();
-			case ArrowRight->
-				setting.mode = setting.mode.next();
-			default->
-				{}
-		}
-	}
 
 	public void handleDifficulty(KeyType type){
 		switch (type){
@@ -127,7 +116,7 @@ public class Menu implements InputHandler {
 		for (int i = 0; i < items.length; i++){
 			tg.putString(4, 3 + i, items[i]);
 		}
-        tg.putString(2, 1, "== SETTINGS ==");
+        tg.putString(2, 1, "== Menu ==");
         tg.putString(2, 3 + menuIndex, ">");
 
         app.refresh();
@@ -135,7 +124,6 @@ public class Menu implements InputHandler {
 
 	private String[] getMenuItems() {
     	return new String[] {
-        	"Mode: " + setting.mode.getStrings()[setting.mode.ordinal()],
 			"Difficulty: " + setting.diff.getStrings()[setting.diff.ordinal()],
         	"Unit: " + setting.unit.getStrings()[setting.unit.ordinal()],
         	"Duration: " + setting.duration + " " + setting.unit.getStrings()[setting.unit.ordinal()],

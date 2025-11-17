@@ -14,7 +14,7 @@ public enum Difficulty implements BaseConstant<Difficulty>{
 	}
 
 	public Difficulty prev(){
-		return diffs[(this.ordinal() + 1) % diffs.length];
+		return diffs[(this.ordinal() - 1 + diffs.length) % diffs.length];
 	}
 
 	public Difficulty getDefault(){

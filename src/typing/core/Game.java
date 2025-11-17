@@ -14,6 +14,8 @@ import java.util.List;
 
 public class Game {
 	private static Setting setting = new Setting();
+	private static UnitMode game;
+	private static GameResult gr;
 
 	public static void main(String[] args) throws Exception{
 		AppState app = new AppState();
@@ -28,8 +30,8 @@ public class Game {
 			app.refresh();
 			List<String> strings = gen.generate(DifficultyFactory.fromEnum(setting.diff), setting, 0.1);
 
-			UnitMode game = GameModeFactory.fromSetting(setting);
-			GameResult gr = game.play(app, strings);
+			game = GameModeFactory.fromSetting(setting);
+			gr = game.play(app, strings);
 
 			Result.showSummary(app, gr.summary());
 

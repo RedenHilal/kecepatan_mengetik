@@ -1,12 +1,10 @@
 package typing.model;
 
-import typing.util.Error;
 import typing.model.constant.*;
 
 public class Setting {
 
 	public int duration = 5;
-	public Mode mode = Mode.NOOBIES;
 	public Unit unit = Unit.WORD;
 	public Difficulty diff = Difficulty.EASY;
 
