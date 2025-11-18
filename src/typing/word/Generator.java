@@ -76,5 +76,12 @@ public class Generator {
                 .map(e -> e.getKey() + " (" + e.getValue().size() + " words)")
                 .collect(Collectors.joining(", "));
     }
+
+	public String getFirstEasyWord() {
+	    List<String> list = wordBank.get(WordType.EASY_WORD);
+    	if (list == null || list.isEmpty()) return null;
+    	return list.get(0);
+	}
+
 }
 

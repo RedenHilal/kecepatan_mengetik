@@ -5,6 +5,7 @@ import typing.core.TypingSession;
 import typing.core.AppState;
 import typing.model.GameResult;
 import typing.util.SleepHelper;
+import typing.util.KeyChecker;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -38,7 +39,10 @@ public class WordMode implements UnitMode {
 			SleepHelper.sleep(30);
             KeyStroke ks = app.pollKey();
             ts.processKey(ks);
-
+			
+			if (KeyChecker.isEscape(ks)){
+				return null;
+			}
 
 			var g = app.tg;
 
@@ -58,6 +62,7 @@ public class WordMode implements UnitMode {
 
         return new GameResult(ts.getIndex(), ts.getKeyPress() - ts.getMistakes(), ts.getKeyPress(), ts.getMistakes(), System.currentTimeMillis() / 1000 - start);
     }
+
 }
 
 

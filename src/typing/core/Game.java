@@ -11,6 +11,7 @@ import typing.model.unitmode.UnitMode;
 import typing.model.unitmode.GameModeFactory;
 
 import java.util.List;
+import java.util.Arrays;
 
 public class Game {
 	private static Setting setting = new Setting();
@@ -21,7 +22,7 @@ public class Game {
 		AppState app = new AppState();
 		Menu menu = new Menu(setting);
 		Generator gen = new Generator();
-		
+
 		while(true){
 			menu.startMenu(app);
 
@@ -32,6 +33,12 @@ public class Game {
 
 			game = GameModeFactory.fromSetting(setting);
 			gr = game.play(app, strings);
+			
+
+			if (gr == null) {
+				setting.stopStart();
+				continue;
+			}
 
 			Result.showSummary(app, gr.summary());
 
@@ -40,6 +47,7 @@ public class Game {
 
 
 		app.cleanUp();
+
 
 
 	}

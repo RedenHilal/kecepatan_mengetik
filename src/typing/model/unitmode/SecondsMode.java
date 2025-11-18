@@ -5,6 +5,7 @@ import typing.core.TypingSession;
 import typing.core.AppState;
 import typing.model.GameResult;
 import typing.util.SleepHelper;
+import typing.util.KeyChecker;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -40,6 +41,9 @@ public class SecondsMode implements UnitMode {
             KeyStroke ks = app.pollKey();
             ts.processKey(ks);
 
+			if (KeyChecker.isEscape(ks)){
+				return null;
+			}
 
 			var g = app.tg;
 
