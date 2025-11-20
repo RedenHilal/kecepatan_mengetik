@@ -68,9 +68,40 @@ package "typing.model.constant" {
     + getLength(): int
     + getStrings(): String[]
   }
-  enum Difficulty
-  enum Unit
-  enum WordType
+  enum Difficulty {
+    EASY
+    MEDIUM
+    HARD
+    HELL
+    CODE
+    --
+    +next() : Difficulty
+    +prev() : Difficulty
+    +getDefault() : Difficulty
+    +getLength() : int
+    +getStrings() : String[]
+  }
+
+  enum Unit {
+    WORD
+    SECOND
+    --
+    +next() : Unit
+    +prev() : Unit
+    +getDefault() : Unit
+    +getLength() : int
+    +getStrings() : String[]
+  }
+
+  enum WordType {
+    EASY_WORD
+    MEDIUM_WORD
+    HARD_WORD
+    EXTENDED_WORD
+    CODE_WORD
+    PUNCTUATION_WORD
+  }
+
 }
 
 package "typing.model.difficulty" {
@@ -206,16 +237,15 @@ UnitMode --> SleepHelper
 Menu --> Setting : uses
 Menu ..> AppState : reads input / draws
 Result ..> AppState : uses
+Game ..> Result : uses
+
 Game --> Generator : creates
 Game --> GameModeFactory : uses
 Game --> Result : uses
 GameModeFactory --> Setting : fromSetting
-WordMode --> TypingSession : creates
-SecondsMode --> TypingSession : creates
-WordMode --> TypingSessionRenderer : uses
-SecondsMode --> TypingSessionRenderer : uses
-WordMode --> AppState : uses
-SecondsMode --> AppState : uses
+UnitMode --> TypingSession : creates
+UnitMode --> TypingSessionRenderer : uses
+UnitMode --> AppState : uses
 Generator --> Stash : loads
 Generator --> BaseDifficulty : uses weights
 BaseDifficulty --> WordType : uses
@@ -224,7 +254,8 @@ DifficultyFactory --> BaseDifficulty : creates
 
 ' Composition / Aggregation (fields)
 GameResult ..> Setting
-Game *.. Setting : composition
+Game *-- AppState : composition
+Game *-- Setting : composition
 Game o-- UnitMode : aggregation
 Game o-- GameResult : aggregation
 

@@ -18,7 +18,9 @@ public class Game {
 	private static UnitMode game;
 	private static GameResult gr;
 
+
 	public static void main(String[] args) throws Exception{
+
 		AppState app = new AppState();
 		Menu menu = new Menu(setting);
 		Generator gen = new Generator();
